@@ -22,13 +22,4 @@ export class QrhistoricController {
     return this.qrhistoricService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateQrhistoricDto: UpdateQrhistoricDto) {
-    return this.qrhistoricService.update(+id, updateQrhistoricDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.qrhistoricService.remove(+id);
-  }
 }

@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Qrhistoric } from "../qrhistoric/entities/qrhistoric.entity";
 
 @Entity()
 export class Client{
@@ -17,4 +18,6 @@ export class Client{
     @UpdateDateColumn({ type: 'timestamp' })
     public updatedAt!: Date;
 
+    @OneToMany(()=> Qrhistoric, qrhistoric => qrhistoric.id)
+    public qrhistoric : Qrhistoric[];
 }

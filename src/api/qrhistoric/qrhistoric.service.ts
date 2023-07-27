@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateQrhistoricDto } from './dto/create-qrhistoric.dto';
 import { UpdateQrhistoricDto } from './dto/update-qrhistoric.dto';
+import { Repository } from 'typeorm';
+import { Qrhistoric } from './entities/qrhistoric.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class QrhistoricService {
-  create(createQrhistoricDto: CreateQrhistoricDto) {
-    return 'This action adds a new qrhistoric';
+  @InjectRepository(Qrhistoric)
+  private readonly qrhistoric: Repository<Qrhistoric>;
+
+
+  public async create(createQrhistoricDto: CreateQrhistoricDto): Promise<Qrhistoric> {
+    const qrhistoric: Qrhistoric = new Qrhistoric();
+    qrhistoric.client = createQrhistoricDto.client;
+    qrhistoric.folio = createQrhistoricDto.folio;
+    qrhistoric.comments = createQrhistoricDto.comments;
+    qrhistoric.document = createQrhistoricDto.document;
+    qrhistoric.qr = createQrhistoricDto.qr;
+
+    return await this.qrhistoric.save(qrhistoric);
   }
 
-  findAll() {
-    return `This action returns all qrhistoric`;
+  public async findAll() : Promise<Qrhistoric[]>{
+    return await this.qrhistoric.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} qrhistoric`;
+  public async findOne(id: number) {
+    return await this.qrhistoric.findOne({where: {id: id}});
   }
 
-  update(id: number, updateQrhistoricDto: UpdateQrhistoricDto) {
-    return `This action updates a #${id} qrhistoric`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} qrhistoric`;
-  }
 }

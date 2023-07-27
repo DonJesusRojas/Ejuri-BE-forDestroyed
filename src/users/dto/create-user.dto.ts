@@ -1,12 +1,10 @@
 import { IsNotEmpty } from "class-validator";
 
-export class CreateDocumentDto {
+export class CreateUserDto{
     @IsNotEmpty()
-    id;
+    name;
     @IsNotEmpty()
-    category;
+    email;
     @IsNotEmpty()
-    type;
-    @IsNotEmpty()
-    duplicate;
+    password;
 }

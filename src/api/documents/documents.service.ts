@@ -1,26 +1,43 @@
 import { Injectable } from '@nestjs/common';
 import { CreateDocumentDto } from './dto/create-document.dto';
 import { UpdateDocumentDto } from './dto/update-document.dto';
-
+import { InjectRepository } from '@nestjs/typeorm';
+import { DeleteResult, Repository } from 'typeorm';
+import { Document } from './entities/document.entity';
 @Injectable()
 export class DocumentsService {
-  create(createDocumentDto: CreateDocumentDto) {
-    return 'This action adds a new document';
+  @InjectRepository(Document)
+  private readonly repository: Repository<Document>;
+
+  create(createDocumentDto: CreateDocumentDto): Promise<Document> {
+    const document: Document = new Document();
+    document.id = createDocumentDto.id;
+    document.category = createDocumentDto.category;
+    document.type = createDocumentDto.type;
+    document.duplicate = createDocumentDto.duplicate;
+
+    return this.repository.save(document);
   }
 
-  findAll() {
-    return `This action returns all documents`;
+  findAll() : Promise<Document[]>{
+    return this.repository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} document`;
+  findOne(id: string) : Promise<Document>{
+    return this.repository.findOneBy({ id: id});
   }
 
-  update(id: number, updateDocumentDto: UpdateDocumentDto) {
-    return `This action updates a #${id} document`;
+  public async update(id: string, updateDocumentDto: UpdateDocumentDto) {
+
+    return await `Thi s action updates a #${id} document`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} document`;
+  public async remove(id: string): Promise<DeleteResult> {
+    return await this.repository.delete(id);
+     
   }
+
+  public async findAllByType(type: string): Promise<Document[]>{
+    return await this.repository.find({where: {category: type}});
+  } 
 }
