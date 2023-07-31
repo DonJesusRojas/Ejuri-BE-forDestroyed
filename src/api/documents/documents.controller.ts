@@ -33,7 +33,7 @@ export class DocumentsController {
   }
 
   @Get('type/:typeDoc')
-  findAllPyme(@Param('typeDoc') type: string){
-    return this.documentsService.findAllByType(type);
+  findAllPyme(@Param('typeDoc') type: number){
+    return this.documentsService.findAllByType(type.toString());
   }
 }

@@ -38,6 +38,9 @@ export class DocumentsService {
   }
 
   public async findAllByType(type: string): Promise<Document[]>{
-    return await this.repository.find({where: {category: type}});
+    return await this.repository.createQueryBuilder("document")
+                                .leftJoinAndSelect("document.category", "category")
+                                .where("document.category = :type", {type: type})
+                                .getMany();
   } 
 }
