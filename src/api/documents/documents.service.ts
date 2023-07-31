@@ -20,7 +20,8 @@ export class DocumentsService {
   }
 
   findAll() : Promise<Document[]>{
-    return this.repository.find();
+    /* return this.repository.find(); */
+    return this.repository.createQueryBuilder("document").leftJoinAndSelect("document.category", "category").getMany();
   }
 
   findOne(id: string) : Promise<Document>{
