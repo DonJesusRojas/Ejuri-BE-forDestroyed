@@ -9,14 +9,19 @@ export class DocumentsService {
   @InjectRepository(Document)
   private readonly repository: Repository<Document>;
 
-  create(createDocumentDto: CreateDocumentDto): Promise<Document> {
-    const document: Document = new Document();
-    document.id = createDocumentDto.id;
-    document.category = createDocumentDto.category;
-    document.type = createDocumentDto.type;
-    document.duplicate = createDocumentDto.duplicate;
+  async create(createDocumentDto: CreateDocumentDto): Promise<Document> {
+    const exist = await this.findOne(createDocumentDto.id);
+    if (exist) {
+      return ;
+    }
+    return await this.repository.save({
+      id: createDocumentDto.id,
+      type: createDocumentDto.type,
+      duplicate: createDocumentDto.duplicate,
+      category: createDocumentDto.category
+    });
 
-    return this.repository.save(document);
+    /* return this.repository.save(document); */
   }
 
   findAll() : Promise<Document[]>{
@@ -25,12 +30,20 @@ export class DocumentsService {
   }
 
   findOne(id: string) : Promise<Document>{
-    return this.repository.findOneBy({ id: id});
+    return this.repository.createQueryBuilder("document").leftJoinAndSelect("document.category", "category").where("document.id = :id", {id: id}).getOne();
+    /* return this.repository.findOneBy({ id: id}); */
   }
 
   public async update(id: string, updateDocumentDto: UpdateDocumentDto) {
+    const exist = await this.findOne(id);
+    if (!exist) {
+      return;
+    }
 
-    return await `Thi s action updates a #${id} document`;
+    const updatedDocument = Object.assign(exist, updateDocumentDto);
+    return await this.repository.save(updatedDocument);
+    /* return await this.repository.update(id, document); */
+    /* return await `Thi s action updates a #${updateDocumentDto.type} document`; */
   }
 
   public async remove(id: string): Promise<DeleteResult> {
