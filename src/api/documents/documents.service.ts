@@ -26,11 +26,13 @@ export class DocumentsService {
 
   findAll() : Promise<Document[]>{
     /* return this.repository.find(); */
-    return this.repository.createQueryBuilder("document").leftJoinAndSelect("document.category", "category").getMany();
+    /* return this.repository.createQueryBuilder("document").leftJoinAndSelect("document.category", "category").orderBy('id','ASC').getMany(); */
+    return this.repository.find({ relations: ["category"], order: {id: "ASC"} })
   }
 
   findOne(id: string) : Promise<Document>{
-    return this.repository.createQueryBuilder("document").leftJoinAndSelect("document.category", "category").where("document.id = :id", {id: id}).getOne();
+    /* return this.repository.createQueryBuilder("document").leftJoinAndSelect("document.category", "category").where("document.id = :id", {id: id}).getOne(); */
+    return this.repository.findOne({ where:{id:id},relations: ["category"] });
     /* return this.repository.findOneBy({ id: id}); */
   }
 
@@ -52,9 +54,10 @@ export class DocumentsService {
   }
 
   public async findAllByType(type: string): Promise<Document[]>{
-    return await this.repository.createQueryBuilder("document")
+    return await this.repository.find({ relations: ["category"], where: { type: type }, order: {id: "ASC"} })
+    /* return await this.repository.createQueryBuilder("document")
                                 .leftJoinAndSelect("document.category", "category")
-                                .where("document.category = :type", {type: type})
-                                .getMany();
+                                .where("document.category = :type", {type: type}).orderBy('id','ASC')
+                                .getMany(); */
   } 
 }

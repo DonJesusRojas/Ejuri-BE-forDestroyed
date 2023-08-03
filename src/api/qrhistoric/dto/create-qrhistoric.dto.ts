@@ -12,7 +12,11 @@ export class CreateQrhistoricDto {
     @IsString()
     @IsNotEmpty()
     document; 
+    @IsNotEmpty()
+    category
     @IsString()
     @IsNotEmpty()
     qr;
+    @IsNotEmpty()
+    user;
 }

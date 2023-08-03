@@ -8,6 +8,7 @@ export class Category {
 
     @Column()
     public name:string
+    
 
     @OneToMany(()=> Qrhistoric, qrhistoric => qrhistoric.id)
     public qrhistoric: Qrhistoric[];

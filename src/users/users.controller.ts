@@ -21,6 +21,11 @@ export class UsersController {
     private readonly jwtService: JwtService,
   ) {}
 
+  @Get()
+  async findAll(): Promise<User[]> {
+    return await this.usersService.findAll();
+  }
+
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
     const hashedPassword = await bcrypt.hash(

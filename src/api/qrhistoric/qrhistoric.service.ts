@@ -18,12 +18,14 @@ export class QrhistoricService {
     qrhistoric.comments = createQrhistoricDto.comments;
     qrhistoric.document = createQrhistoricDto.document;
     qrhistoric.qr = createQrhistoricDto.qr;
+    qrhistoric.user = createQrhistoricDto.user;
+    qrhistoric.category = createQrhistoricDto.category;
 
     return await this.qrhistoric.save(qrhistoric);
   }
 
   public async findAll() : Promise<Qrhistoric[]>{
-    return await this.qrhistoric.find();
+    return await this.qrhistoric.find({relations: ["client", "document","category","user"], order: {id: "DESC"}});
   }
 
   public async findOne(id: number) {
